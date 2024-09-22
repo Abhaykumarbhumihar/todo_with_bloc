@@ -1,0 +1,132 @@
+name: todoapp
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  font_awesome_flutter:
+  flutter_bloc:
+  equatable:
+  hive_flutter:
+  get_it:
+  intl:
+
+
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  flutter_lints: ^3.0.0
+  hive_generator: ^1.1.0
+  build_runner: ^2.1.0
+
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/images/
+  #   - images/a_dot_ham.jpeg
+
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  fonts:
+    - family: Poppins Black
+      fonts:
+        - asset: assets/fonts/Poppins-Black.ttf
+
+    - family: Poppins BlackItalic
+      fonts:
+        - asset: assets/fonts/Poppins-BlackItalic.ttf
+
+    - family: Poppins Bold
+      fonts:
+        - asset: assets/fonts/Poppins-Bold.ttf
+
+    - family: Poppins BoldItalic
+      fonts:
+        - asset: assets/fonts/Poppins-BoldItalic.ttf
+
+    - family: Poppins ExtraBold
+      fonts:
+        - asset: assets/fonts/Poppins-ExtraBold.ttf
+
+    - family: Poppins ExtraBoldItalic
+      fonts:
+        - asset: assets/fonts/Poppins-ExtraBoldItalic.ttf
+
+    - family: Poppins ExtraLight
+      fonts:
+        - asset: assets/fonts/Poppins-ExtraLight.ttf
+
+    - family: Poppins ExtraLightItalic
+      fonts:
+        - asset: assets/fonts/Poppins-ExtraLightItalic.ttf
+
+    - family: Poppins Italic
+      fonts:
+        - asset: assets/fonts/Poppins-Italic.ttf
+
+    - family: Poppins Light
+      fonts:
+        - asset: assets/fonts/Poppins-Light.ttf
+
+    - family: Poppins LightItalic
+      fonts:
+        - asset: assets/fonts/Poppins-LightItalic.ttf
+
+    - family: Poppins Medium
+      fonts:
+        - asset: assets/fonts/Poppins-Medium.ttf
+
+    - family: Poppins MediumItalic
+      fonts:
+        - asset: assets/fonts/Poppins-MediumItalic.ttf
+
+    - family: Poppins Regular
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+
+    - family: Poppins SemiBold
+      fonts:
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+
+    - family: Poppins SemiBoldItalic
+      fonts:
+        - asset: assets/fonts/Poppins-SemiBoldItalic.ttf
+
+    - family: Poppins Thin
+      fonts:
+        - asset: assets/fonts/Poppins-Thin.ttf
+
+    - family: Poppins ThinItalic
+      fonts:
+        - asset: assets/fonts/Poppins-ThinItalic.ttf
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
