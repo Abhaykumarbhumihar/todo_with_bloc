@@ -1,5 +1,15 @@
 part of 'all_list_bloc.dart';
 
-sealed class AllListEvent extends Equatable {
+abstract class AllListEvent extends Equatable {
   const AllListEvent();
+}
+
+class GetTodoTaskLoading extends AllListEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class GetTodoTaskList extends AllListEvent {
+  @override
+  List<Object?> get props => [];
 }

@@ -6,4 +6,5 @@ extension UniqueIdGenerator on DateTime {
     String uniqueIdString = '${this.millisecondsSinceEpoch}$randomPart';
     return int.parse(uniqueIdString);
   }
+
 }

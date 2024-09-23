@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todoapp/pages/addTask/domain/entities/add_task_model.dart';
+import 'package:todoapp/pages/addTask/domain/entities/category.dart';
 import 'package:todoapp/pages/addTask/presentation/bloc/add_task_bloc.dart';
+
 import '../../../../common/responsive/screenUtils.dart';
 import '../../../../common/values/app_color.dart';
 import '../component/add_task_component.dart';
-import '../component/datepicker_componet.dart';
 
 class AddTodo extends StatelessWidget {
   AddTodo({super.key});
@@ -22,32 +24,51 @@ class AddTodo extends StatelessWidget {
     return SafeArea(
       child: BlocListener<AddTaskBloc, AddTaskState>(
         listener: (context, state) {
-          print(state);
+          print(state.addTaskModel);
           if (state.categorySuccessMessage == "Category Added") {
             context.read<AddTaskBloc>().add(GetCategoryEvent());
           }
+          context.read<AddTaskBloc>().add(GetTodoTaskListEvent());
         },
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           backgroundColor: AppColor.backgroundColor,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              var time = timeController.text.toString();
-              var date = dueDateController.text.toString();
-              var taskname = taskNameController.text.toString();
+          floatingActionButton: BlocBuilder<AddTaskBloc, AddTaskState>(
+            builder: (context, state) {
+              return FloatingActionButton(
+                onPressed: () {
+                  var time = timeController.text.toString();
+                  var date = dueDateController.text.toString();
+                  var taskname = taskNameController.text.toString();
+                  TaskCategory taskCategory;
+                  if (state.selectedCategory == null) {
+                    taskCategory =
+                        TaskCategory(categoryName: "Default", categoryId: 101);
+                  } else {
+                    taskCategory = state.selectedCategory!;
+                  }
+
+                  context.read<AddTaskBloc>().add(AddTodoTaskEvent(AddTaskModel(
+                      name: taskname,
+                      title: taskname,
+                      time: time ?? "",
+                      category: taskCategory,
+                      date: date ?? "")));
+                },
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+                elevation: 6.0,
+                mini: false,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(screenWidth),
+                ),
+                tooltip: 'Add Item',
+                child: const Icon(
+                  Icons.check,
+                  color: Colors.white,
+                ),
+              );
             },
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
-            elevation: 6.0,
-            mini: false,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(screenWidth),
-            ),
-            tooltip: 'Add Item',
-            child: const Icon(
-              Icons.check,
-              color: Colors.white,
-            ),
           ),
           body: SizedBox(
             width: screenWidth,
@@ -153,13 +174,11 @@ class AddTodo extends StatelessWidget {
 
   _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(), // Refer step 1
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
+      context: context, initialDate: DateTime.now(), // Refer step 1
+      firstDate: DateTime(2000), lastDate: DateTime(2025),
     );
     if (picked != null) {
-      dueDateController.text=picked.toString();
+      dueDateController.text = picked.toString();
       print(picked);
     }
   }
@@ -169,7 +188,7 @@ class AddTodo extends StatelessWidget {
         await showTimePicker(context: context, initialTime: TimeOfDay.now());
 
     if (time != null) {
-      timeController.text=("${time.hour}:${time.minute}");
+      timeController.text = ("${time.hour}:${time.minute}");
       print("${time.hour}:${time.minute}");
     }
   }

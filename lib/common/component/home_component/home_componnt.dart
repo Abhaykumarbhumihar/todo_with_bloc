@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:todoapp/pages/addTask/domain/entities/add_task_model.dart';
 
 import '../../responsive/screenUtils.dart';
 import '../../values/app_color.dart';
@@ -259,6 +260,7 @@ Widget title({BuildContext? context, String? title, double? screenWidth}) {
 
 Widget todoLisst({
   BuildContext? context,
+  AddTaskModel? addTaskModel
 }) {
   double screenWidth = ScreenUtils.width(context!);
   double screenHeight = ScreenUtils.height(context);
