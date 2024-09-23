@@ -4,7 +4,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:todoapp/common/component/home_component/home_componnt.dart';
 import 'package:todoapp/common/responsive/screenUtils.dart';
 import 'package:todoapp/common/routes/routes.dart';
+import 'package:todoapp/common/servicelocator/serview_locator.dart';
 import 'package:todoapp/common/values/app_color.dart';
+import 'package:todoapp/pages/all_list/domain/usecase/get_todo_task_usecase..dart';
 
 import '../bloc/all_list_bloc.dart';
 class HomePage extends StatelessWidget {
@@ -18,19 +20,8 @@ class HomePage extends StatelessWidget {
     return BlocConsumer<AllListBloc, AllListState>(
       listener: (context, state) {
 
-        if (state.errorMessage!.isNotEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.errorMessage??"")),
-          );
-        }
-        if (state.successMessage!.isNotEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.successMessage??"")),
-          );
-        }
-      },
+        },
       builder: (context, state) {
-
         return SafeArea(
           child: Scaffold(
             resizeToAvoidBottomInset: true,
@@ -44,7 +35,7 @@ class HomePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       const SizedBox(height: 15),
-                      ListView.builder(
+                      state.addTodoTask!.isNotEmpty?   ListView.builder(
                         itemCount: state.addTodoTask!.length,
                         itemBuilder: (context, index) {
                           return todoLisst(
@@ -52,7 +43,7 @@ class HomePage extends StatelessWidget {
                             addTaskModel: state.addTodoTask![index],
                           );
                         },
-                      ),
+                      ):SizedBox.shrink(),
                     ],
                   ),
                   Positioned(
