@@ -74,6 +74,8 @@ class AllListBloc extends Bloc<AllListEvent, AllListState> {
     }
   }
 
+
+
   Future<void> selectCategoryForFilter(
       SelectedCategoryForFilterEvent event, Emitter<AllListState> emit) async {
     try {
