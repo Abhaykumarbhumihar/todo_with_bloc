@@ -4,11 +4,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:todoapp/common/component/home_component/home_componnt.dart';
 import 'package:todoapp/common/responsive/screenUtils.dart';
 import 'package:todoapp/common/routes/routes.dart';
-import 'package:todoapp/common/servicelocator/serview_locator.dart';
 import 'package:todoapp/common/values/app_color.dart';
-import 'package:todoapp/pages/all_list/domain/usecase/get_todo_task_usecase..dart';
+import 'package:todoapp/pages/all_list/presentation/component/all_list_component.dart';
 
 import '../bloc/all_list_bloc.dart';
+
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
@@ -17,122 +17,128 @@ class HomePage extends StatelessWidget {
     double screenWidth = ScreenUtils.width(context);
     double screenHeight = ScreenUtils.height(context);
 
-    return BlocConsumer<AllListBloc, AllListState>(
+    return BlocListener<AllListBloc, AllListState>(
       listener: (context, state) {
-
-        },
-      builder: (context, state) {
-        return SafeArea(
-          child: Scaffold(
-            resizeToAvoidBottomInset: true,
-            backgroundColor: AppColor.backgroundColor,
-            body: Container(
-              width: screenWidth,
-              height: screenHeight,
-              child: Stack(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const SizedBox(height: 15),
-                      state.addTodoTask!.isNotEmpty?   ListView.builder(
-                        itemCount: state.addTodoTask!.length,
-                        itemBuilder: (context, index) {
-                          return todoLisst(
-                            context: context,
-                            addTaskModel: state.addTodoTask![index],
-                          );
-                        },
-                      ):SizedBox.shrink(),
-                    ],
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      padding: EdgeInsets.only(
-                          bottom: 10, left: 10, right: 10, top: 10),
-                      color: AppColor.appBarColor,
-                      child: Row(
-                        children: <Widget>[
-                          Icon(
-                            FontAwesomeIcons.microphone,
-                            color: Colors.white,
-                            size: screenWidth * 0.06,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: TextField(
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: screenWidth * 0.04,
-                                fontFamily: "Poppins Medium",
-                              ),
-                              decoration: InputDecoration(
-                                isDense: true,
-                                hintText: "Enter Quick Task Here",
-                                hintStyle: TextStyle(
-                                  color: Colors.white38,
-                                  fontSize: screenWidth * 0.04,
-                                  fontFamily: "Poppins Medium",
-                                ),
-                                enabledBorder: const UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.cyan, width: 1),
-                                ),
-                                disabledBorder: const UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.white30, width: 1),
-                                ),
-                                focusedBorder: const UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.cyan, width: 2),
-                                ),
-                                border: const UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.cyan),
-                                ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 5), // Adjust padding
-                              ),
+      },
+      child: SafeArea(
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          backgroundColor: AppColor.backgroundColor,
+          appBar: PreferredSize(
+              preferredSize: Size.fromHeight(ScreenUtils.height(context) * 0.1),
+              child: BlocBuilder<AllListBloc, AllListState>(
+                builder: (context, state) {
+                  return appBar(
+                      context: context,
+                      dropdownItems: state.category,
+                      selectedCategory: state.selectedCategory,
+                      popmenuclick: (String value) {
+                        print(value);
+                        switch (value) {
+                          case 'Task Lists':
+                            print('Task Lists selected');
+                            Navigator.pushNamed(context, "/task_list");
+                            break;
+                          case 'Settings':
+                            print('Settings selected');
+                            break;
+                          case 'Send Feedback':
+                            print('Send Feedback selected');
+                            break;
+                          case 'Follow us':
+                            print('Follow us selected');
+                            break;
+                          case 'Invite friends':
+                            print('Invite friends selected');
+                            break;
+                        }
+                      });
+                },
+              ),
+          ),
+          body: Container(
+            width: screenWidth,
+            height: screenHeight,
+            child: Stack(
+              children: [
+                BlocBuilder<AllListBloc, AllListState>(
+                  builder: (context, state) {
+                    return state.addTodoTask!.isNotEmpty
+                        ? SizedBox(
+                      width: screenWidth,
+                      height: screenHeight,
+                      child: taskList(state, screenWidth),
+                    )
+                        : const SizedBox.shrink();
+                  },
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.only(
+                        bottom: 10, left: 10, right: 10, top: 10),
+                    color: AppColor.appBarColor,
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          FontAwesomeIcons.microphone,
+                          color: Colors.white,
+                          size: screenWidth * 0.06,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          flex: 1,
+                          child: TextField(
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: screenWidth * 0.04,
+                              fontFamily: "Poppins Medium",
+                            ),
+                            decoration: customInputDecoration(
+                              isDense: true,
+                              hintText: "Enter Quick Task Here",
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          Icon(
-                            FontAwesomeIcons.microphone,
-                            color: Colors.white,
-                            size: screenWidth * 0.06,
-                          ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 10),
+                        Icon(
+                          FontAwesomeIcons.microphone,
+                          color: Colors.white,
+                          size: screenWidth * 0.06,
+                        ),
+                      ],
                     ),
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
             ),
-            floatingActionButton: Padding(
-              padding: EdgeInsets.only(bottom: screenHeight * 0.08),
-              child: FloatingActionButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.ADD_TASK_LIST);
-                },
-                mini: true,
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.white,
-                elevation: 6.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(screenWidth),
-                ),
-                tooltip: 'Add Item',
-                child: const Icon(
-                  Icons.add,
-                  color: AppColor.backgroundColor,
-                ),
+          ),
+          floatingActionButton: Padding(
+            padding: EdgeInsets.only(bottom: screenHeight * 0.08),
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.ADD_TASK_LIST);
+              },
+              mini: true,
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.white,
+              elevation: 6.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(screenWidth),
+              ),
+              tooltip: 'Add Item',
+              child: const Icon(
+                Icons.add,
+                color: AppColor.backgroundColor,
               ),
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
+
+
 }

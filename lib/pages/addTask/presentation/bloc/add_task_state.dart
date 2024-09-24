@@ -19,7 +19,10 @@ final class AddTaskState extends Equatable {
       this.addTaskModel});
 
   factory AddTaskState.initial() {
-    return AddTaskState(categoryLoading: false, addTaskLoading: false);
+    return AddTaskState(
+      categoryLoading: false,
+      addTaskLoading: false,
+    );
   }
 
   factory AddTaskState.locading() {
@@ -54,10 +57,8 @@ final class AddTaskState extends Equatable {
       {dynamic? category,
       bool? categoryLoading,
       bool? addTaskLoading,
-
       String? categoryErrorMessage,
       String? categorySuccessMessage,
-
       TaskCategory? selectedCategory,
       AddTaskModel? addTaskModel}) {
     return AddTaskState(

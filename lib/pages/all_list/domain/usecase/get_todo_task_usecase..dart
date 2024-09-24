@@ -6,7 +6,11 @@ class GetTodoTaskUseCase {
 
   GetTodoTaskUseCase(this._getTodoTaskRepositery);
 
-  Future<List<AddTaskModel>> getCategory() async {
+  Future<List<AddTaskModel>> getTodoList() async {
     return _getTodoTaskRepositery.getTodoTaskList();
   }
+  Future<dynamic>getCategory()async{
+    return _getTodoTaskRepositery.getCategory();
+  }
+
 }

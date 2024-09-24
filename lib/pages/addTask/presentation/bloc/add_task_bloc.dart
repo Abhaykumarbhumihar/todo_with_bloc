@@ -15,7 +15,6 @@ part 'add_task_state.dart';
 class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
   AddTaskUseCase _addTaskUseCase;
   Box<TaskCategory>? _categoryBox;
-  Box<AddTaskModel>? _taskBox;
 
   AddTaskBloc(this._addTaskUseCase) : super(AddTaskState.initial()) {
     _initialize();
@@ -23,21 +22,46 @@ class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
     on<GetCategoryEvent>(getCategory);
     on<SelectCategoryEvent>(selectCategory);
     on<AddTodoTaskEvent>(addTaskEvent);
-    on<GetTodoTaskListEvent>(getAllTodoTask);
   }
 
   Future<void> _initialize() async {
     _categoryBox = await HiveHelper().openBox<TaskCategory>('category');
-    // _taskBox = await HiveHelper().openBox<AddTaskModel>('task');
+    await addDefaultCategories();
     add(GetCategoryEvent());
+
     Future.delayed(Duration(milliseconds: 500));
-    add(GetTodoTaskListEvent());
+  }
+
+  Future<void> addDefaultCategories() async {
+    List<TaskCategory> defaultCategories = [
+      TaskCategory(categoryId: 1, categoryName: "Work"),
+      TaskCategory(categoryId: 2, categoryName: "Default"),
+      TaskCategory(categoryId: 3, categoryName: "Study"),
+      TaskCategory(categoryId: 4, categoryName: "Exercise"),
+    ];
+
+    for (TaskCategory categoryName in defaultCategories) {
+      // Check if the category already exists
+      print("CODE IS RUNNING HEREREE");
+      bool exists = _categoryBox?.values
+              .any((category) => category.categoryId == categoryName.categoryId) ??
+          false;
+      if (!exists) {
+        var taskCategory = TaskCategory(
+          categoryName: categoryName.categoryName,
+          categoryId: categoryName.categoryId,
+        );
+        await _addTaskUseCase.addCategory(taskCategory);
+      }
+    }
   }
 
   Future<void> addCategory(
       AddCategoryEvent event, Emitter<AddTaskState> emit) async {
     if (event.categoryName.isEmpty) {
-      emit(state.copyWith(categoryErrorMessage: "Category name is required"));
+      emit(state.copyWith(
+          categoryErrorMessage: "Category name is required",
+          categorySuccessMessage: ''));
       return;
     }
 
@@ -45,7 +69,9 @@ class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
         categoryName: event.categoryName,
         categoryId: DateTime.now().generateUniqueId());
     await _addTaskUseCase.addCategory(taskCategory);
-    emit(state.copyWith(categorySuccessMessage: "Category Added"));
+    emit(state.copyWith(
+      categorySuccessMessage: "Category Added",
+    ));
   }
 
   Future<void> selectCategory(
@@ -56,29 +82,13 @@ class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
   Future<void> getCategory(
       GetCategoryEvent event, Emitter<AddTaskState> emit) async {
     try {
-      var data = _categoryBox?.values.toList().cast<TaskCategory>();
-      print(data);
+      var data = await _categoryBox?.values.toList().cast<TaskCategory>();
       emit(state.copyWith(
           category: data, categorySuccessMessage: "Category Fetched"));
     } catch (e) {
-      emit(state.copyWith(categoryErrorMessage: "Failed to retrieve data: $e"));
-    }
-  }
-
-  Future<void> getAllTodoTask(
-      GetTodoTaskListEvent event, Emitter<AddTaskState> emit) async {
-    emit(state.copyWith(addTaskLoading: true));
-
-    try {
-      var todotaskList = await _addTaskUseCase.getTodoTaskList();
-      todotaskList.forEach((element) {
-        print(element.title);
-      });
-      emit(state.copyWith(addTaskLoading: false));
-    } catch (e) {
       emit(state.copyWith(
-          categoryErrorMessage: "Failed to retrieve todo task: $e",
-          addTaskLoading: false));
+          categoryErrorMessage: "Failed to retrieve data: $e",
+          categorySuccessMessage: ''));
     }
   }
 
@@ -86,11 +96,8 @@ class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
       AddTodoTaskEvent event, Emitter<AddTaskState> emit) async {
     try {
       print(event.addTaskModel.category.categoryName);
-
-      var data = _addTaskUseCase.addTask(event.addTaskModel);
-      print(data);
-      emit(state.copyWith(categorySuccessMessage: "Task added ${data}"));
-      add(GetTodoTaskListEvent());
+      await _addTaskUseCase.addTask(event.addTaskModel);
+      emit(state.copyWith(categorySuccessMessage: "Task added"));
     } catch (e) {
       emit(state.copyWith(
         categoryErrorMessage: "Failed to retrieve data: $e",

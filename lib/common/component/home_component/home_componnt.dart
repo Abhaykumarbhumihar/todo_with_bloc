@@ -1,16 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:grouped_list/grouped_list.dart';
+import 'package:intl/intl.dart';
+import 'package:todoapp/common/extension/common_extension.dart';
 import 'package:todoapp/pages/addTask/domain/entities/add_task_model.dart';
+import 'package:todoapp/pages/addTask/domain/entities/category.dart';
 
+import '../../../pages/all_list/presentation/bloc/all_list_bloc.dart';
 import '../../responsive/screenUtils.dart';
 import '../../values/app_color.dart';
 
 Widget appBar(
     {BuildContext? context,
-    List<String>? dropdownItems,
-    void Function(String value)? popmenuclick}) {
+    List<TaskCategory>? dropdownItems,
+    void Function(String value)? popmenuclick,
+    TaskCategory? selectedCategory}) {
   double screenWidth = ScreenUtils.width(context!);
   double containerSize = screenWidth * 0.2 - screenWidth * 0.11;
 
@@ -51,10 +57,10 @@ Widget appBar(
             ),
             Padding(
               padding: EdgeInsets.only(left: screenWidth * 0.06),
-              child: DropdownButton<String>(
+              child: DropdownButton<TaskCategory>(
                 padding: EdgeInsets.zero,
                 isExpanded: false,
-                value: "Item 1",
+                value: selectedCategory,
                 hint: const Text('Select an item'),
                 dropdownColor: Colors.blueAccent,
                 // Background color of the dropdown
@@ -69,11 +75,11 @@ Widget appBar(
                 // Style for the text
                 underline: const SizedBox(),
                 alignment: Alignment.centerLeft,
-                items: dropdownItems?.map((String item) {
-                  return DropdownMenuItem<String>(
+                items: dropdownItems?.map((TaskCategory item) {
+                  return DropdownMenuItem<TaskCategory>(
                     value: item,
                     child: Text(
-                      "Al Lists",
+                      item.categoryName,
                       style: TextStyle(
                           color: Colors.white,
                           fontFamily: 'Poppins SemiBold',
@@ -81,7 +87,10 @@ Widget appBar(
                     ),
                   );
                 }).toList(),
-                onChanged: (String? newValue) {},
+                onChanged: (TaskCategory? newValue) {
+                  BlocProvider.of<AllListBloc>(context!)
+                      .add(SelectedCategoryForFilterEvent(newValue));
+                },
               ),
             ),
           ],
@@ -138,7 +147,6 @@ Widget appBar(
   );
 }
 
-
 Widget appBarcommono({BuildContext? context, String? title}) {
   double screenWidth = ScreenUtils.width(context!);
   double containerSize = screenWidth * 0.2 - screenWidth * 0.10;
@@ -161,7 +169,7 @@ Widget appBarcommono({BuildContext? context, String? title}) {
       children: <Widget>[
         Row(
           children: <Widget>[
-             Icon(
+            Icon(
               CupertinoIcons.arrow_left,
               color: Colors.white,
               size: screenWidth * 0.06,
@@ -188,65 +196,6 @@ Widget appBarcommono({BuildContext? context, String? title}) {
 
 
 
-Widget addetdToList(
-    {BuildContext? context,
-    double? screenWidth,
-    double? screenHeight,
-    List<String>? dropdownItems}) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      title(context: context, screenWidth: screenWidth, title: "Add to List"),
-      Row(
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: EdgeInsets.only(right: screenWidth! * 0.08),
-              child: DropdownButton<String>(
-                padding: EdgeInsets.zero,
-                isExpanded: true,
-                value: "Item 1",
-                hint: const Text('Select an item'),
-                dropdownColor: Colors.blueAccent,
-                // Background color of the dropdown
-                icon: Icon(
-                  Icons.arrow_drop_down,
-                  color: Colors.white,
-                  size: screenWidth! * 0.06,
-                ),
-                // Icon for the dropdown
-                style: const TextStyle(color: Colors.black, fontSize: 20),
-                // Style for the text
-                underline: const SizedBox(),
-                alignment: Alignment.centerLeft,
-                items: dropdownItems?.map((String item) {
-                  return DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(
-                      "Al Lists",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Poppins Medium',
-                          fontSize: screenWidth * 0.04),
-                    ),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {},
-              ),
-            ),
-          ),
-          Icon(
-            FontAwesomeIcons.outdent,
-            color: Colors.white,
-            size: screenWidth * 0.07,
-          )
-        ],
-      )
-    ],
-  );
-}
-
 Widget title({BuildContext? context, String? title, double? screenWidth}) {
   return Text(
     "$title",
@@ -258,87 +207,113 @@ Widget title({BuildContext? context, String? title, double? screenWidth}) {
   );
 }
 
-Widget todoLisst({
-  BuildContext? context,
-  AddTaskModel? addTaskModel
-}) {
+Widget taskList(AllListState state, double screenWidth) {
+  return GroupedListView<AddTaskModel, String>(
+    elements: state.addTodoTask!,
+    groupBy: (AddTaskModel task) =>
+        DateFormat('yyyy-MM-dd').format(DateTime.parse(task.date)),
+    groupHeaderBuilder: (AddTaskModel task) {
+      // Get current date
+      DateTime currentDate = DateTime.now();
+      DateTime taskDate = DateTime.parse(task.date);
+
+      String headerText;
+
+      // Compare with today and tomorrow
+      if (_isSameDay(currentDate, taskDate)) {
+        headerText = "Today";
+      } else if (_isSameDay(currentDate.add(Duration(days: 1)), taskDate)) {
+        headerText = "Tomorrow";
+      } else {
+        headerText = DateFormat('EEE, MMM d, yyyy').format(taskDate);
+      }
+      return Padding(
+        padding: const EdgeInsets.only(left: 18.0, top: 6, bottom: 12),
+        child: Text(
+          headerText, // Format the date header
+          style: TextStyle(
+            color: AppColor.appSubTextColor,
+            fontSize: screenWidth * 0.04,
+            fontFamily: 'Poppins Medium',
+          ),
+        ),
+      );
+    },
+    itemBuilder: (context, AddTaskModel task) {
+      return todoLisst(context: context, addTaskModel: task);
+    },
+    order: GroupedListOrder.ASC, // Sort order
+  );
+}
+
+Widget todoLisst({BuildContext? context, AddTaskModel? addTaskModel}) {
   double screenWidth = ScreenUtils.width(context!);
   double screenHeight = ScreenUtils.height(context);
-  return Expanded(
-    child: Padding(
-      padding: EdgeInsets.only(
-        left: screenWidth * 0.04,
-        right: screenWidth * 0.04,
-        bottom: screenWidth * 0.06,
+
+  return Padding(
+    padding: EdgeInsets.only(
+      left: screenWidth * 0.04,
+      right: screenWidth * 0.04,
+      bottom: screenWidth * 0.06,
+    ),
+    child: Container(
+      width: screenWidth,
+      padding:
+          const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 12.0),
+      decoration: BoxDecoration(
+        color: AppColor.backgroundContainerColor,
+        borderRadius: BorderRadius.circular(16.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text(
-            "Tomorrow",
-            style: TextStyle(
-              color: AppColor.appSubTextColor,
-              fontSize: screenWidth * 0.04,
-              fontFamily: 'Poppins Medium',
+          Padding(
+            padding:
+                EdgeInsets.only(bottom: screenHeight * 0.021, right: 4.0),
+            child: Checkbox(
+              value: true,
+              onChanged: (value) {},
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
           ),
-          SizedBox(
-            height: screenHeight * 0.01 + screenHeight * 0.008,
-          ),
-          Container(
-            width: screenWidth,
-            padding: const EdgeInsets.all(12.0),
-            decoration: BoxDecoration(
-              color: AppColor.backgroundContainerColor,
-              borderRadius: BorderRadius.circular(16.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.5),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                  offset: const Offset(0, 1),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                "${addTaskModel?.title}",
+                style: TextStyle(
+                  color: AppColor.appTitleTextColor,
+                  fontFamily: 'Poppins SemiBold',
+                  fontSize: screenWidth * 0.04,
                 ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding:
-                      EdgeInsets.only(bottom: screenHeight * 0.021, right: 4.0),
-                  child: Checkbox(
-                    value: true,
-                    onChanged: (value) {},
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
+              ),
+              Text(
+                "${addTaskModel!.date!.toFormattedDate()}",
+                style: TextStyle(
+                  color: AppColor.appSubTextColor,
+                  fontFamily: 'Poppins Regular',
+                  fontSize: screenWidth * 0.04 - screenWidth * 0.004,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Flutter animation",
-                      style: TextStyle(
-                        color: AppColor.appTitleTextColor,
-                        fontFamily: 'Poppins SemiBold',
-                        fontSize: screenWidth * 0.04,
-                      ),
-                    ),
-                    Text(
-                      "Wed, Oct 16, 2024",
-                      style: TextStyle(
-                        color: AppColor.appSubTextColor,
-                        fontFamily: 'Poppins Regular',
-                        fontSize: screenWidth * 0.04 - screenWidth * 0.004,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
     ),
   );
+}
+
+bool _isSameDay(DateTime date1, DateTime date2) {
+  return date1.year == date2.year &&
+      date1.month == date2.month &&
+      date1.day == date2.day;
 }

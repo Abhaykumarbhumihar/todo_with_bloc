@@ -7,6 +7,7 @@ import 'package:todoapp/pages/addTask/presentation/bloc/add_task_bloc.dart';
 
 import '../../../../common/responsive/screenUtils.dart';
 import '../../../../common/values/app_color.dart';
+import '../../../all_list/presentation/bloc/all_list_bloc.dart';
 import '../component/add_task_component.dart';
 
 class AddTodo extends StatelessWidget {
@@ -24,11 +25,16 @@ class AddTodo extends StatelessWidget {
     return SafeArea(
       child: BlocListener<AddTaskBloc, AddTaskState>(
         listener: (context, state) {
-          print(state.addTaskModel);
           if (state.categorySuccessMessage == "Category Added") {
+            state.categorySuccessMessage = "";
             context.read<AddTaskBloc>().add(GetCategoryEvent());
+            context.read<AllListBloc>().add(GetCategoryForFilterEvent());
+          } else if (state.categorySuccessMessage == "Task added") {
+            state.categorySuccessMessage = "";
+            context.read<AllListBloc>().add(GetTodoTaskList());
+            Navigator.pop(context);
           }
-          context.read<AddTaskBloc>().add(GetTodoTaskListEvent());
+          //context.read<AddTaskBloc>().add(GetTodoTaskListEvent());
         },
         child: Scaffold(
           resizeToAvoidBottomInset: true,
@@ -74,7 +80,6 @@ class AddTodo extends StatelessWidget {
             width: screenWidth,
             height: screenHeight,
             child: SingleChildScrollView(
-              // Added this
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[

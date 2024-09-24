@@ -20,6 +20,7 @@ class AppPages {
           bloc: BlocProvider(
             create: (_) {
               final bloc = AllListBloc(getIt<GetTodoTaskUseCase>());
+              bloc.add(GetCategoryForFilterEvent());
               bloc.add(GetTodoTaskList());
               return bloc;
             },

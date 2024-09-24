@@ -20,6 +20,7 @@ dependencies:
   hive_flutter:
   get_it:
   intl:
+  grouped_list:
 
 
 
