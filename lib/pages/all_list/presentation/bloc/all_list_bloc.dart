@@ -13,13 +13,10 @@ class AllListBloc extends Bloc<AllListEvent, AllListState> {
   GetTodoTaskUseCase _getTodoTaskUseCase;
 
   AllListBloc(this._getTodoTaskUseCase) : super(AllListState.initial()) {
-
     on<GetTodoTaskList>(getAllTaskList);
     on<GetCategoryForFilterEvent>(getAllCategory);
     on<SelectedCategoryForFilterEvent>(selectCategoryForFilter);
   }
-
-
 
   Future<void> getAllTaskList(
       GetTodoTaskList event, Emitter<AllListState> emit) async {
