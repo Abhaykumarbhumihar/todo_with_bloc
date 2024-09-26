@@ -29,7 +29,7 @@ class TaskList extends StatelessWidget {
             child: Column(
               children: [
                 appBarcommono(context: context, title: "Task Lists"),
-                TaskListView()
+                const TaskListView()
               ],
             ),
           ),

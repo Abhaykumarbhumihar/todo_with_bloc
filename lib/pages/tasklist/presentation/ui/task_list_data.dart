@@ -47,11 +47,10 @@ class TaskListView extends StatelessWidget {
                       child: Stack(
                         children: <Widget>[
                           Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                "${state.addTodoTask![index].title}",
+                                state.addTodoTask![index].title,
                                 style: TextStyle(
                                   color: AppColor.appTitleTextColor,
                                   fontFamily: 'Poppins SemiBold',
