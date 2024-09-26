@@ -129,31 +129,34 @@ class HomePage extends StatelessWidget {
                               duration: Duration(seconds: 2),
                               child: IconButton(
                                   onPressed: () {
+                                    var id = DateTime.now().millisecondsSinceEpoch.toString();
+                                    print("ID save at add time is  == $id");
                                     if (!state.isQuickTextEmpty) {
-                                      /**add task*/
-                                      TaskCategory taskCategory = TaskCategory(
-                                          categoryName: "Default",
-                                          categoryId: 2);
-                                      context.read<AddTaskBloc>().add(
-                                          AddTodoTaskEvent(AddTaskModel(
-                                              name: taskNameController.text
-                                                  .toString(),
-                                              title: taskNameController.text
-                                                  .toString(),
-                                              time: "",
-                                              category: taskCategory,
-                                              date: "")));
+                                       /**add task*/
+                                       TaskCategory taskCategory = TaskCategory(
+                                           categoryName: "Default",
+                                           categoryId: 2);
+                                       context.read<AddTaskBloc>().add(
+                                           AddTodoTaskEvent(AddTaskModel(
+                                             id: id,
+                                               name: taskNameController.text
+                                                   .toString(),
+                                               title: taskNameController.text
+                                                   .toString(),
+                                               time: "",
+                                               category: taskCategory,
+                                               date: "")));
 
-                                      /**clear text controller*/
-                                      taskNameController.clear();
-                                      context
-                                          .read<AllListBloc>()
-                                          .add(QuickTextChange(true));
+                                       /**clear text controller*/
+                                       taskNameController.clear();
+                                       context
+                                           .read<AllListBloc>()
+                                           .add(QuickTextChange(true));
 
-                                      /**refresh tasklik*/
-                                      context
-                                          .read<AllListBloc>()
-                                          .add(GetTodoTaskList());
+                                       /**refresh tasklik*/
+                                       context
+                                           .read<AllListBloc>()
+                                           .add(GetTodoTaskList());
                                     }
                                   },
                                   icon: Icon(
@@ -175,7 +178,7 @@ class HomePage extends StatelessWidget {
             padding: EdgeInsets.only(bottom: screenHeight * 0.08),
             child: FloatingActionButton(
               onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.ADD_TASK_LIST);
+                Navigator.pushNamed(context, AppRoutes.ADD_TASK_LIST,arguments: null);
               },
               mini: true,
               backgroundColor: Colors.white,

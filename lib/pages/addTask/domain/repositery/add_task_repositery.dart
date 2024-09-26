@@ -8,4 +8,6 @@ Future<void>addCategory(TaskCategory category);
 Future<dynamic>getCategory();
 Future<dynamic>addTask(AddTaskModel addTaskModel);
 Future<List<AddTaskModel>>getAllTask();
+
+Future<dynamic>updateTask(AddTaskModel addtaskModel);
 }

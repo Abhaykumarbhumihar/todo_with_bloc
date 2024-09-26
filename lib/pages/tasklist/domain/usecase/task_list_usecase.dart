@@ -9,4 +9,6 @@ class TaskListUseCase {
   Future<List<AddTaskModel>> getAllTaskList() {
     return _taskListRepositery.getAllTaskList();
   }
+
+
 }

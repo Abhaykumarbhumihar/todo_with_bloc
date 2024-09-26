@@ -4,4 +4,6 @@ abstract class TaskListRepositery{
   Future<List<AddTaskModel>>getAllTaskList();
   Future<dynamic>deleteTask();
 
+
+
 }

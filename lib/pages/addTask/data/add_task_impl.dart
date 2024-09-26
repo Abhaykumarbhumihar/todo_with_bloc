@@ -22,7 +22,7 @@ class AddTaskRepositeryImpl extends AddTaskRepositery {
   @override
   Future addTask(AddTaskModel addTaskModel) async {
     try {
-      await _hiveHelper.addData("task", addTaskModel);
+      await _hiveHelper.addDataWithKey("task",  addTaskModel.id, addTaskModel);
     } catch (e) {
       throw Exception("Failed to add todo task: $e");
     }
@@ -45,6 +45,24 @@ class AddTaskRepositeryImpl extends AddTaskRepositery {
       return todoTaskList;
     } catch (e) {
       throw Exception("Failed to get todo task list: $e");
+    }
+  }
+
+  @override
+  Future<void> updateTask(AddTaskModel updatedTask) async {
+    try {
+      final taskId = updatedTask.id;
+print("ID AT UPDATE TIME $taskId");
+      // Optional: Check if the task exists before updating
+      final existingTask = await _hiveHelper.getDataByKey<AddTaskModel>("task", taskId);
+      if (existingTask == null) {
+        print("Task with id $taskId does not exist.");
+        throw Exception("Task with id $taskId does not exist.");
+      }
+
+      await _hiveHelper.updateData("task", taskId, updatedTask);
+    } catch (e) {
+      throw Exception("Failed to update todo task: $e");
     }
   }
 }

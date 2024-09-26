@@ -24,4 +24,8 @@ class AddTaskUseCase {
   Future<List<AddTaskModel>>getTodoTaskList()async{
     return _addTaskRepositery.getAllTask();
   }
+
+  Future<dynamic> upDateTask(AddTaskModel addtaskModel) {
+    return _addTaskRepositery.updateTask(addtaskModel);
+  }
 }

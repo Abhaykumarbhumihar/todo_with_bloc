@@ -21,10 +21,16 @@ class AddTaskModel extends HiveObject {
   @HiveField(4)
   String date;
 
+  @HiveField(5)
+  String id;
+  @HiveField(6)
+  String status;
   AddTaskModel(
       {required this.name,
       required this.title,
       required this.time,
       required this.category,
-      required this.date});
+      required this.date,
+      required this.id,
+      this.status = "Default"});
 }

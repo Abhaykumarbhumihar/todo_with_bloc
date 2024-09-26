@@ -34,6 +34,14 @@ class AddTodoTaskEvent extends AddTaskEvent {
   List<Object?> get props => [addTaskModel];
 }
 
+class UpdateTodoTaskEvent extends AddTaskEvent {
+  AddTaskModel addTaskModel;
+  UpdateTodoTaskEvent(this.addTaskModel);
+
+  @override
+  List<Object?> get props => [addTaskModel];
+}
+
 class DateAddedEvent extends AddTaskEvent {
   bool isAdded;
   DateAddedEvent(this.isAdded);

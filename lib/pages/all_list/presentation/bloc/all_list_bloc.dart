@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 
 import '../../../addTask/domain/entities/add_task_model.dart';
 import '../../../addTask/domain/entities/category.dart';
-import '../../domain/usecase/get_todo_task_usecase..dart';
+import '../../domain/usecase/get_todo_task_usecase.dart';
 
 part 'all_list_event.dart';
 

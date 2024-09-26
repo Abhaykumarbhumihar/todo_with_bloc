@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todoapp/common/extension/common_extension.dart';
 import 'package:todoapp/pages/addTask/domain/entities/category.dart';
@@ -13,6 +14,10 @@ part 'add_task_event.dart';
 part 'add_task_state.dart';
 
 class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
+  TextEditingController dueDateController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
+  TextEditingController taskNameController = TextEditingController();
+
   AddTaskUseCase _addTaskUseCase;
   Box<TaskCategory>? _categoryBox;
 
@@ -25,6 +30,7 @@ class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
     on<TimeAddedEvent>(isTimeAdded);
     on<DateAddedEvent>(isDateAdded);
     on<TimeFielShowdEvent>(isTimeShow);
+    on<UpdateTodoTaskEvent>(updateTaskEvent);
   }
 
   Future<void> _initialize() async {
@@ -85,7 +91,9 @@ class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
   Future<void> getCategory(
       GetCategoryEvent event, Emitter<AddTaskState> emit) async {
     try {
+      print("CALLING CODE IN  getCategory getCategory getCategory");
       var data = await _categoryBox?.values.toList().cast<TaskCategory>();
+      print(data);
       emit(state.copyWith(
           category: data, categorySuccessMessage: "Category Fetched"));
     } catch (e) {
@@ -101,6 +109,20 @@ class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
       print(event.addTaskModel.category.categoryName);
       await _addTaskUseCase.addTask(event.addTaskModel);
       emit(state.copyWith(categorySuccessMessage: "Task added"));
+    } catch (e) {
+      emit(state.copyWith(
+        categoryErrorMessage: "Failed to retrieve data: $e",
+      ));
+    }
+  }
+
+  Future<void> updateTaskEvent(
+      UpdateTodoTaskEvent event, Emitter<AddTaskState> emit) async {
+    try {
+
+
+      await _addTaskUseCase.upDateTask(event.addTaskModel);
+      emit(state.copyWith(categorySuccessMessage: "Task updated"));
     } catch (e) {
       emit(state.copyWith(
         categoryErrorMessage: "Failed to retrieve data: $e",

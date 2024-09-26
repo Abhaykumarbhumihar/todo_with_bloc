@@ -1,6 +1,6 @@
 part of 'add_task_bloc.dart';
 
-final class AddTaskState extends Equatable {
+ class AddTaskState extends Equatable {
   List<TaskCategory>? category;
   bool categoryLoading;
   bool addTaskLoading;
@@ -34,7 +34,7 @@ final class AddTaskState extends Equatable {
   }
 
   AddTaskState copyWith(
-      {dynamic? category,
+      {List<TaskCategory>? category,
       bool? categoryLoading,
       bool? addTaskLoading,
       String? categoryErrorMessage,

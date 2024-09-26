@@ -17,7 +17,7 @@ extension DateFormatter on String {
       DateTime dateTime = DateTime.parse(this); // Parse the string to DateTime
       return DateFormat('EEE, MMM d, yyyy').format(dateTime); // Format the date
     } catch (e) {
-      return 'Invalid date'; // Return an error message if the string can't be parsed
+      return ''; // Return an error message if the string can't be parsed
     }
   }
 }

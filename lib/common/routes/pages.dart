@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoapp/common/routes/routes.dart';
 import 'package:todoapp/common/servicelocator/serview_locator.dart';
 import 'package:todoapp/pages/addTask/presentation/bloc/add_task_bloc.dart';
-import 'package:todoapp/pages/all_list/domain/usecase/get_todo_task_usecase..dart';
+import 'package:todoapp/pages/all_list/domain/usecase/get_todo_task_usecase.dart';
 import 'package:todoapp/pages/all_list/presentation/ui/home.dart';
 import 'package:todoapp/pages/tasklist/domain/usecase/task_list_usecase.dart';
 import 'package:todoapp/pages/tasklist/presentation/bloc/task_list_bloc.dart';

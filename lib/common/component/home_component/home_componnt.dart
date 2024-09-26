@@ -247,9 +247,11 @@ Widget taskList(AllListState state, double screenWidth) {
             headerText = DateFormat('EEE, MMM d, yyyy').format(taskDate);
           }
         } catch (e) {
-          headerText = "Invalid Date"; // Fallback for invalid dates
+          headerText = ""; // Fallback for invalid dates
         }
       }
+
+
       return Padding(
         padding: const EdgeInsets.only(left: 18.0, top: 6, bottom: 12),
         child: Text(
@@ -273,6 +275,8 @@ Widget todoList({BuildContext? context, AddTaskModel? addTaskModel}) {
   double screenWidth = ScreenUtils.width(context!);
   double screenHeight = ScreenUtils.height(context);
 
+
+  print( addTaskModel!.id+" "+addTaskModel.time+" "+addTaskModel.title);
   return Padding(
     padding: EdgeInsets.only(
       left: screenWidth * 0.04,

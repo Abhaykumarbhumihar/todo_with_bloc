@@ -22,13 +22,15 @@ class AddTaskModelAdapter extends TypeAdapter<AddTaskModel> {
       time: fields[2] as String,
       category: fields[3] as TaskCategory,
       date: fields[4] as String,
+      id: fields[5] as String,
+      status: fields[6] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, AddTaskModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -38,7 +40,11 @@ class AddTaskModelAdapter extends TypeAdapter<AddTaskModel> {
       ..writeByte(3)
       ..write(obj.category)
       ..writeByte(4)
-      ..write(obj.date);
+      ..write(obj.date)
+      ..writeByte(5)
+      ..write(obj.id)
+      ..writeByte(6)
+      ..write(obj.status);
   }
 
   @override
