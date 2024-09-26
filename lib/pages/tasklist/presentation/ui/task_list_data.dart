@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:todoapp/common/extension/common_extension.dart';
 
 import '../../../../common/responsive/screenUtils.dart';
 import '../../../../common/values/app_color.dart';
@@ -58,7 +59,8 @@ class TaskListView extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                "Wed, Oct 16, 2024",
+                                state.addTodoTask![index].date!
+                                    .toFormattedDate(),
                                 style: TextStyle(
                                     color: AppColor.appSubTextColor,
                                     fontFamily: 'Poppins Regular',
@@ -68,22 +70,30 @@ class TaskListView extends StatelessWidget {
                           ),
                           Positioned(
                             right: 0.0,
-                            top: screenHeight * 0.019,
+                            top: -5,
                             child: Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                Icon(
-                                  FontAwesomeIcons.pencil,
-                                  color: Colors.white,
-                                  size: screenWidth * 0.06,
-                                ),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                Icon(
-                                  FontAwesomeIcons.trash,
-                                  color: Colors.white,
-                                  size: screenWidth * 0.06,
-                                )
+                                IconButton(
+                                    tooltip: "Update Task",
+                                    onPressed: () {
+
+                                    },
+                                    padding: EdgeInsets.zero,
+                                    icon: Icon(
+                                      FontAwesomeIcons.pencil,
+                                      color: Colors.white,
+                                      size: screenWidth * 0.04,
+                                    )),
+                                IconButton(
+                                    tooltip: "Delete Task",
+                                    padding: EdgeInsets.zero,
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      FontAwesomeIcons.trash,
+                                      color: Colors.white,
+                                      size: screenWidth * 0.04,
+                                    ))
                               ],
                             ),
                           )
