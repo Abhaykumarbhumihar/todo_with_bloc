@@ -1,10 +1,20 @@
 part of 'task_list_bloc.dart';
 
-sealed class TaskListState extends Equatable {
-  const TaskListState();
-}
+class TaskListState extends Equatable {
+  final List<AddTaskModel>? addTodoTask;
 
-final class TaskListInitial extends TaskListState {
+  TaskListState({this.addTodoTask});
+
+  factory TaskListState.initial() {
+    return TaskListState(addTodoTask: []);
+  }
+
+  TaskListState copyWith({List<AddTaskModel>? addTodoTask}) {
+    return TaskListState(
+      addTodoTask: addTodoTask ?? this.addTodoTask,
+    );
+  }
+
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [addTodoTask];
 }

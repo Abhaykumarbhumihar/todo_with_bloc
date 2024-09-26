@@ -7,6 +7,7 @@ class AllListState extends Equatable {
   final String? errorMessage;
   final String? successMessage;
   TaskCategory? selectedCategory;
+  bool isQuickTextEmpty;
 
   AllListState(
       {this.addTodoTask,
@@ -14,10 +15,15 @@ class AllListState extends Equatable {
       this.errorMessage,
       this.successMessage,
       this.category,
-      this.selectedCategory});
+      this.selectedCategory,
+      this.isQuickTextEmpty = true});
 
   factory AllListState.initial() {
-    return AllListState(isTaskLoading: false, addTodoTask: [], category: []);
+    return AllListState(
+        isTaskLoading: false,
+        addTodoTask: [],
+        category: [],
+        isQuickTextEmpty: true);
   }
 
   AllListState copyWith(
@@ -26,10 +32,12 @@ class AllListState extends Equatable {
       String? errorMessage,
       String? successMessage,
       List<TaskCategory>? category,
-      TaskCategory? selectedCategory}) {
+      TaskCategory? selectedCategory,
+      bool? isQuickTextEmpty}) {
     return AllListState(
         addTodoTask: addTodoTask ?? this.addTodoTask,
         isTaskLoading: isTaskLoading ?? this.isTaskLoading,
+        isQuickTextEmpty: isQuickTextEmpty ?? this.isQuickTextEmpty,
         errorMessage: errorMessage ?? this.errorMessage,
         successMessage: successMessage ?? this.successMessage,
         category: category ?? this.category,
@@ -42,6 +50,7 @@ class AllListState extends Equatable {
         isTaskLoading,
         errorMessage,
         successMessage,
-        selectedCategory
+        selectedCategory,
+        isQuickTextEmpty
       ];
 }

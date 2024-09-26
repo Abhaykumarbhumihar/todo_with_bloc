@@ -22,6 +22,9 @@ class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
     on<GetCategoryEvent>(getCategory);
     on<SelectCategoryEvent>(selectCategory);
     on<AddTodoTaskEvent>(addTaskEvent);
+    on<TimeAddedEvent>(isTimeAdded);
+    on<DateAddedEvent>(isDateAdded);
+    on<TimeFielShowdEvent>(isTimeShow);
   }
 
   Future<void> _initialize() async {
@@ -43,8 +46,8 @@ class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
     for (TaskCategory categoryName in defaultCategories) {
       // Check if the category already exists
       print("CODE IS RUNNING HEREREE");
-      bool exists = _categoryBox?.values
-              .any((category) => category.categoryId == categoryName.categoryId) ??
+      bool exists = _categoryBox?.values.any(
+              (category) => category.categoryId == categoryName.categoryId) ??
           false;
       if (!exists) {
         var taskCategory = TaskCategory(
@@ -102,6 +105,28 @@ class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
       emit(state.copyWith(
         categoryErrorMessage: "Failed to retrieve data: $e",
       ));
+    }
+  }
+
+  // ye time field me cancel ka field hide show krega
+  Future<void> isTimeAdded(
+      TimeAddedEvent event, Emitter<AddTaskState> emit) async {
+    emit(state.copyWith(isTimeSelected: event.isAdded));
+  }
+
+  //ye time ka field hide show krega
+  Future<void> isTimeShow(
+      TimeFielShowdEvent event, Emitter<AddTaskState> emit) async {
+    emit(state.copyWith(isTimeShow: event.isAdded));
+  }
+
+  Future<void> isDateAdded(
+      DateAddedEvent event, Emitter<AddTaskState> emit) async {
+    emit(state.copyWith(isDateSelected: event.isAdded));
+    if (event.isAdded) {
+      add(TimeFielShowdEvent(true));
+    } else {
+      add(TimeFielShowdEvent(false));
     }
   }
 }

@@ -34,4 +34,26 @@ class AddTodoTaskEvent extends AddTaskEvent {
   List<Object?> get props => [addTaskModel];
 }
 
+class DateAddedEvent extends AddTaskEvent {
+  bool isAdded;
+  DateAddedEvent(this.isAdded);
 
+  @override
+  List<Object?> get props => [isAdded];
+}
+
+class TimeFielShowdEvent extends AddTaskEvent {
+  bool isAdded;
+  TimeFielShowdEvent(this.isAdded);
+
+  @override
+  List<Object?> get props => [isAdded];
+}
+
+class TimeAddedEvent extends AddTaskEvent {
+  bool isAdded;
+  TimeAddedEvent(this.isAdded);
+
+  @override
+  List<Object?> get props => [isAdded];
+}

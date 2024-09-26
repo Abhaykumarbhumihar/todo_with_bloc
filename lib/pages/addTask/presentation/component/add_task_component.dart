@@ -50,7 +50,8 @@ Widget appBarAddTodo({BuildContext? context, String? title}) {
   );
 }
 
-Widget todoTitle({BuildContext? context,
+Widget todoTitle({
+  BuildContext? context,
   double? screenWidth,
   TextEditingController? taskNameController,
 }) {
@@ -96,9 +97,14 @@ Widget dueDate(
     double? screenHeight,
     TextEditingController? dueDateController,
     TextEditingController? timeController,
-
+    bool isTimeAdded =
+        false, // ye time field me cancel ka field hide show krega
+    bool isDateCrossShow = false,
+    bool isTimeShow = false, //ye time ka field hide show krega
     void Function()? datepickerclick,
-    void Function()? timepickerclick}) {
+    void Function()? timepickerclick,
+    void Function()? dateClear,
+    void Function()? timeClear}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
@@ -108,6 +114,7 @@ Widget dueDate(
           Expanded(
             child: TextField(
               controller: dueDateController,
+              enabled: false,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: screenWidth! * 0.04,
@@ -121,41 +128,65 @@ Widget dueDate(
           ),
           SizedBox(width: 10),
           IconButton(
+              padding: EdgeInsets.zero,
               onPressed: datepickerclick,
               icon: Icon(
                 FontAwesomeIcons.calendarDay,
                 color: Colors.white,
                 size: screenWidth * 0.06,
               )),
+          isDateCrossShow
+              ? IconButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: dateClear,
+                  icon: Icon(
+                    FontAwesomeIcons.circleXmark,
+                    color: Colors.white,
+                    size: screenWidth * 0.06,
+                  ))
+              : SizedBox(),
         ],
       ),
       const SizedBox(height: 15),
-      Row(
-        children: <Widget>[
-          Expanded(
-            child: TextField(
-              controller: timeController,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: screenWidth! * 0.04,
-                fontFamily: "Poppins Medium",
-              ),
-              decoration: customInputDecoration(
-                isDense: true,
-                hintText: "Time not set (all day)",
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          IconButton(
-              onPressed: timepickerclick,
-              icon: Icon(
-                FontAwesomeIcons.clock,
-                color: Colors.white,
-                size: screenWidth * 0.06,
-              )),
-        ],
-      ),
+      isTimeShow
+          ? Row(
+              children: <Widget>[
+                Expanded(
+                  child: TextField(
+                    controller: timeController,
+                    enabled: false,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: screenWidth! * 0.04,
+                      fontFamily: "Poppins Medium",
+                    ),
+                    decoration: customInputDecoration(
+                      isDense: true,
+                      hintText: "Time not set (all day)",
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                IconButton(
+                    onPressed: timepickerclick,
+                    icon: Icon(
+                      FontAwesomeIcons.clock,
+                      color: Colors.white,
+                      size: screenWidth * 0.06,
+                    )),
+                isTimeAdded
+                    ? IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: timeClear,
+                        icon: Icon(
+                          FontAwesomeIcons.circleXmark,
+                          color: Colors.white,
+                          size: screenWidth * 0.06,
+                        ))
+                    : SizedBox.shrink()
+              ],
+            )
+          : SizedBox.shrink(),
     ],
   );
 }
@@ -256,6 +287,10 @@ InputDecoration customInputDecoration({
     ),
     border: UnderlineInputBorder(
       borderSide: BorderSide(color: enabledBorderColor),
+    ),
+    disabledBorder: UnderlineInputBorder(
+      borderSide:
+          BorderSide(color: enabledBorderColor, width: enabledBorderWidth),
     ),
     contentPadding: contentPadding,
   );

@@ -88,8 +88,14 @@ Widget appBar(
                   );
                 }).toList(),
                 onChanged: (TaskCategory? newValue) {
-                  BlocProvider.of<AllListBloc>(context!)
-                      .add(SelectedCategoryForFilterEvent(newValue));
+                  if (newValue?.categoryId == 000) {
+                    print("Get All List item");
+                    BlocProvider.of<AllListBloc>(context!)
+                        .add(GetTodoTaskList());
+                  } else {
+                    BlocProvider.of<AllListBloc>(context!)
+                        .add(SelectedCategoryForFilterEvent(newValue));
+                  }
                 },
               ),
             ),
@@ -194,8 +200,6 @@ Widget appBarcommono({BuildContext? context, String? title}) {
   );
 }
 
-
-
 Widget title({BuildContext? context, String? title, double? screenWidth}) {
   return Text(
     "$title",
@@ -210,22 +214,41 @@ Widget title({BuildContext? context, String? title, double? screenWidth}) {
 Widget taskList(AllListState state, double screenWidth) {
   return GroupedListView<AddTaskModel, String>(
     elements: state.addTodoTask!,
-    groupBy: (AddTaskModel task) =>
-        DateFormat('yyyy-MM-dd').format(DateTime.parse(task.date)),
+    groupBy: (AddTaskModel task) {
+      // Check if task.date is null or empty
+      if (task.date == null || task.date.isEmpty) {
+        return "No Date"; // Group for tasks without a date
+      }
+      try {
+        // Try parsing the date
+        return DateFormat('yyyy-MM-dd').format(DateTime.parse(task.date));
+      } catch (e) {
+        return "Invalid Date"; // Group for invalid dates
+      }
+    },
     groupHeaderBuilder: (AddTaskModel task) {
       // Get current date
       DateTime currentDate = DateTime.now();
-      DateTime taskDate = DateTime.parse(task.date);
+      DateTime taskDate;
 
+      // Determine the header text
       String headerText;
-
-      // Compare with today and tomorrow
-      if (_isSameDay(currentDate, taskDate)) {
-        headerText = "Today";
-      } else if (_isSameDay(currentDate.add(Duration(days: 1)), taskDate)) {
-        headerText = "Tomorrow";
+      if (task.date == null || task.date.isEmpty) {
+        headerText = "No Date";
       } else {
-        headerText = DateFormat('EEE, MMM d, yyyy').format(taskDate);
+        try {
+          taskDate = DateTime.parse(task.date);
+          // Compare with today and tomorrow
+          if (_isSameDay(currentDate, taskDate)) {
+            headerText = "Today";
+          } else if (_isSameDay(currentDate.add(Duration(days: 1)), taskDate)) {
+            headerText = "Tomorrow";
+          } else {
+            headerText = DateFormat('EEE, MMM d, yyyy').format(taskDate);
+          }
+        } catch (e) {
+          headerText = "Invalid Date"; // Fallback for invalid dates
+        }
       }
       return Padding(
         padding: const EdgeInsets.only(left: 18.0, top: 6, bottom: 12),
@@ -240,13 +263,13 @@ Widget taskList(AllListState state, double screenWidth) {
       );
     },
     itemBuilder: (context, AddTaskModel task) {
-      return todoLisst(context: context, addTaskModel: task);
+      return todoList(context: context, addTaskModel: task);
     },
     order: GroupedListOrder.ASC, // Sort order
   );
 }
 
-Widget todoLisst({BuildContext? context, AddTaskModel? addTaskModel}) {
+Widget todoList({BuildContext? context, AddTaskModel? addTaskModel}) {
   double screenWidth = ScreenUtils.width(context!);
   double screenHeight = ScreenUtils.height(context);
 
@@ -258,8 +281,7 @@ Widget todoLisst({BuildContext? context, AddTaskModel? addTaskModel}) {
     ),
     child: Container(
       width: screenWidth,
-      padding:
-          const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 12.0),
+      padding: const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 12.0),
       decoration: BoxDecoration(
         color: AppColor.backgroundContainerColor,
         borderRadius: BorderRadius.circular(16.0),
@@ -277,8 +299,7 @@ Widget todoLisst({BuildContext? context, AddTaskModel? addTaskModel}) {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding:
-                EdgeInsets.only(bottom: screenHeight * 0.021, right: 4.0),
+            padding: EdgeInsets.only(bottom: screenHeight * 0.021, right: 4.0),
             child: Checkbox(
               value: true,
               onChanged: (value) {},

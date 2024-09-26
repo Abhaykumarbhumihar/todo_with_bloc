@@ -8,6 +8,9 @@ final class AddTaskState extends Equatable {
   String? categorySuccessMessage;
   final TaskCategory? selectedCategory;
   AddTaskModel? addTaskModel;
+  bool isDateSelected;
+  bool isTimeSelected;
+  bool isTimeShow;
 
   AddTaskState(
       {this.category,
@@ -16,41 +19,18 @@ final class AddTaskState extends Equatable {
       required this.addTaskLoading,
       this.categorySuccessMessage,
       this.selectedCategory,
-      this.addTaskModel});
+      this.addTaskModel,
+      this.isDateSelected = false,
+      this.isTimeSelected = false,
+      this.isTimeShow = false});
 
   factory AddTaskState.initial() {
     return AddTaskState(
-      categoryLoading: false,
-      addTaskLoading: false,
-    );
-  }
-
-  factory AddTaskState.locading() {
-    return AddTaskState(categoryLoading: true, addTaskLoading: false);
-  }
-
-  factory AddTaskState.loaded(
-      List<TaskCategory>? categry, String successMessage) {
-    return AddTaskState(
         categoryLoading: false,
         addTaskLoading: false,
-        category: categry,
-        categorySuccessMessage: successMessage);
-  }
-
-  factory AddTaskState.added(AddTaskModel addTaskModel, String successMessage) {
-    return AddTaskState(
-        categoryLoading: false,
-        addTaskLoading: false,
-        addTaskModel: addTaskModel,
-        categorySuccessMessage: successMessage);
-  }
-
-  factory AddTaskState.error(String message) {
-    return AddTaskState(
-        categoryLoading: false,
-        addTaskLoading: false,
-        categoryErrorMessage: message);
+        isDateSelected: false,
+        isTimeSelected: false,
+        isTimeShow: false);
   }
 
   AddTaskState copyWith(
@@ -60,16 +40,23 @@ final class AddTaskState extends Equatable {
       String? categoryErrorMessage,
       String? categorySuccessMessage,
       TaskCategory? selectedCategory,
-      AddTaskModel? addTaskModel}) {
+      AddTaskModel? addTaskModel,
+      bool? isDateSelected,
+      bool? isTimeSelected,
+      bool? isTimeShow}) {
     return AddTaskState(
-        addTaskLoading: addTaskLoading ?? this.addTaskLoading,
-        categoryLoading: categoryLoading ?? this.categoryLoading,
-        category: category ?? this.category,
-        categoryErrorMessage: categoryErrorMessage ?? this.categoryErrorMessage,
-        categorySuccessMessage:
-            categorySuccessMessage ?? this.categorySuccessMessage,
-        selectedCategory: selectedCategory ?? this.selectedCategory,
-        addTaskModel: addTaskModel ?? this.addTaskModel);
+      addTaskLoading: addTaskLoading ?? this.addTaskLoading,
+      categoryLoading: categoryLoading ?? this.categoryLoading,
+      isDateSelected: isDateSelected ?? this.isDateSelected,
+      isTimeShow: isTimeShow ?? this.isTimeShow,
+      isTimeSelected: isTimeSelected ?? this.isTimeSelected,
+      category: category ?? this.category,
+      categoryErrorMessage: categoryErrorMessage ?? this.categoryErrorMessage,
+      categorySuccessMessage:
+          categorySuccessMessage ?? this.categorySuccessMessage,
+      selectedCategory: selectedCategory ?? this.selectedCategory,
+      addTaskModel: addTaskModel ?? this.addTaskModel,
+    );
   }
 
   @override
@@ -79,6 +66,9 @@ final class AddTaskState extends Equatable {
         categoryErrorMessage ?? '',
         categorySuccessMessage ?? '',
         selectedCategory ?? '',
-        addTaskModel ?? ''
+        addTaskModel ?? '',
+        isTimeSelected,
+        isDateSelected,
+        isTimeShow
       ];
 }

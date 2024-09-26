@@ -11,11 +11,11 @@ part 'all_list_state.dart';
 
 class AllListBloc extends Bloc<AllListEvent, AllListState> {
   GetTodoTaskUseCase _getTodoTaskUseCase;
-
   AllListBloc(this._getTodoTaskUseCase) : super(AllListState.initial()) {
     on<GetTodoTaskList>(getAllTaskList);
     on<GetCategoryForFilterEvent>(getAllCategory);
     on<SelectedCategoryForFilterEvent>(selectCategoryForFilter);
+    on<QuickTextChange>(quickTaskTextEmpty);
   }
 
   Future<void> getAllTaskList(
@@ -65,6 +65,7 @@ class AllListBloc extends Bloc<AllListEvent, AllListState> {
       GetCategoryForFilterEvent event, Emitter<AllListState> emit) async {
     try {
       var data = await _getTodoTaskUseCase.getCategory();
+      data.add(TaskCategory(categoryName: "All List", categoryId: 000));
       emit(state.copyWith(category: data, successMessage: "Category Fetched"));
     } catch (e) {
       emit(state.copyWith(
@@ -74,7 +75,13 @@ class AllListBloc extends Bloc<AllListEvent, AllListState> {
     }
   }
 
+  Future<void> quickTaskTextEmpty(
+      QuickTextChange event, Emitter<AllListState> emit) async {
+    emit(state.copyWith(isQuickTextEmpty: event.isEmpty));
+  }
 
+  Future<void> addQuickTask(
+      AddQuickTaskEvent event, Emitter<AllListState> emit) async {}
 
   Future<void> selectCategoryForFilter(
       SelectedCategoryForFilterEvent event, Emitter<AllListState> emit) async {

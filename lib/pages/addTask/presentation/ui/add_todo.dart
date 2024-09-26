@@ -34,7 +34,6 @@ class AddTodo extends StatelessWidget {
             context.read<AllListBloc>().add(GetTodoTaskList());
             Navigator.pop(context);
           }
-          //context.read<AddTaskBloc>().add(GetTodoTaskListEvent());
         },
         child: Scaffold(
           resizeToAvoidBottomInset: true,
@@ -43,23 +42,28 @@ class AddTodo extends StatelessWidget {
             builder: (context, state) {
               return FloatingActionButton(
                 onPressed: () {
-                  var time = timeController.text.toString();
-                  var date = dueDateController.text.toString();
-                  var taskname = taskNameController.text.toString();
-                  TaskCategory taskCategory;
-                  if (state.selectedCategory == null) {
-                    taskCategory =
-                        TaskCategory(categoryName: "Default", categoryId: 101);
-                  } else {
-                    taskCategory = state.selectedCategory!;
-                  }
+                  if (taskNameController.text.isNotEmpty) {
+                    var time = timeController.text.toString();
+                    var date = dueDateController.text.toString();
+                    var taskname = taskNameController.text.toString();
+                    TaskCategory taskCategory;
+                    if (state.selectedCategory == null) {
+                      taskCategory =
+                          TaskCategory(categoryName: "Default", categoryId: 2);
+                    } else {
+                      taskCategory = state.selectedCategory!;
+                    }
 
-                  context.read<AddTaskBloc>().add(AddTodoTaskEvent(AddTaskModel(
-                      name: taskname,
-                      title: taskname,
-                      time: time ?? "",
-                      category: taskCategory,
-                      date: date ?? "")));
+                    context.read<AddTaskBloc>().add(AddTodoTaskEvent(
+                        AddTaskModel(
+                            name: taskname,
+                            title: taskname,
+                            time: time ?? "",
+                            category: taskCategory,
+                            date: date ?? "")));
+                  } else {
+                    print("Please enter task name");
+                  }
                 },
                 backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
@@ -104,11 +108,34 @@ class AddTodo extends StatelessWidget {
                                 screenHeight: screenHeight,
                                 dueDateController: dueDateController,
                                 timeController: timeController,
+                                isDateCrossShow: state.isDateSelected,
+                                isTimeShow: state.isTimeShow,
+                                //ye time ka field hide show krega
+                                isTimeAdded: state.isTimeSelected,
+                                // ye time field me cancel ka field hide show krega
                                 datepickerclick: () {
+                                  context
+                                      .read<AddTaskBloc>()
+                                      .add(DateAddedEvent(true));
                                   _selectDate(context);
                                 },
                                 timepickerclick: () {
+                                  context
+                                      .read<AddTaskBloc>()
+                                      .add(TimeAddedEvent(true));
                                   _selectTime(context);
+                                },
+                                dateClear: () {
+                                  dueDateController.clear();
+                                  context
+                                      .read<AddTaskBloc>()
+                                      .add(DateAddedEvent(false));
+                                },
+                                timeClear: () {
+                                  timeController.clear();
+                                  context
+                                      .read<AddTaskBloc>()
+                                      .add(TimeAddedEvent(false));
                                 });
                           },
                         ),
