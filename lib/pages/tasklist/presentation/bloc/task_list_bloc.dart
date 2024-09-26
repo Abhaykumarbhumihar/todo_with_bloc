@@ -12,6 +12,7 @@ class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
   TaskListUseCase _taskListUseCase;
   TaskListBloc(this._taskListUseCase) : super(TaskListState.initial()) {
     on<GetAllTaskListEvent>(getAllTaskLitst);
+    on<DeleteTaskEvent>(deleteTaskById);
   }
 
   Future<void> getAllTaskLitst(
@@ -35,9 +36,13 @@ class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
     }
   }
 
-
-
-
-
-
+  Future<void> deleteTaskById(
+      DeleteTaskEvent event, Emitter<TaskListState> emit) async {
+    try {
+      final deleteTaskResult = _taskListUseCase.deleteTask(event.taskId);
+      add(GetAllTaskListEvent());
+    } catch (e) {
+      print("Task not deleted");
+    }
+  }
 }

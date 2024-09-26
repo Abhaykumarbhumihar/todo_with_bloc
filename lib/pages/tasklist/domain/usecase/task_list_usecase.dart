@@ -10,5 +10,7 @@ class TaskListUseCase {
     return _taskListRepositery.getAllTaskList();
   }
 
-
+  Future<dynamic>deleteTask(String taskId){
+    return _taskListRepositery.deleteTask(taskId);
+  }
 }

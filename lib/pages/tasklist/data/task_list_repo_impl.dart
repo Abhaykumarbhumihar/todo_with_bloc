@@ -8,8 +8,10 @@ class TaskListRepositeryImple extends TaskListRepositery {
   TaskListRepositeryImple(this._hiveHelper);
 
   @override
-  Future deleteTask() async {
-    try {} catch (e) {
+  Future deleteTask(String taskId) async {
+    try {
+      return await _hiveHelper.deleteDataByKey<AddTaskModel>("task",taskId);
+    } catch (e) {
       throw Exception("Failed to delete task  $e");
     }
   }

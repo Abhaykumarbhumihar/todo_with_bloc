@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [...AppPages.allblocProviders(context)],
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'Todo App',
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

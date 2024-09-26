@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:todoapp/common/extension/common_extension.dart';
+import 'package:todoapp/pages/all_list/presentation/bloc/all_list_bloc.dart';
 
 import '../../../../common/responsive/screenUtils.dart';
 import '../../../../common/routes/routes.dart';
@@ -146,7 +147,14 @@ class TaskListView extends StatelessWidget {
                                   IconButton(
                                       tooltip: "Delete Task",
                                       padding: EdgeInsets.zero,
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        context.read<TaskListBloc>().add(
+                                            DeleteTaskEvent(
+                                                state.addTodoTask![index].id));
+                                        context
+                                            .read<AllListBloc>()
+                                            .add(GetTodoTaskList());
+                                      },
                                       icon: Icon(
                                         FontAwesomeIcons.trash,
                                         color: Colors.white,
