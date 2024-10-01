@@ -21,7 +21,7 @@ class AppPages {
           route: AppRoutes.ALL_TASK_LIST,
           bloc: BlocProvider(
             create: (_) {
-              final bloc = AllListBloc(getIt<GetTodoTaskUseCase>());
+              final bloc = AllListBloc();
               bloc.add(GetCategoryForFilterEvent());
               bloc.add(GetTodoTaskList());
               return bloc;
@@ -41,7 +41,7 @@ class AppPages {
           page: TaskList(),
           route: AppRoutes.TASK_LIST,
           bloc: BlocProvider(create: (_) {
-            final bloc = TaskListBloc(getIt<TaskListUseCase>());
+            final bloc = TaskListBloc();
             bloc.add(GetAllTaskListEvent());
             return bloc;
           }))

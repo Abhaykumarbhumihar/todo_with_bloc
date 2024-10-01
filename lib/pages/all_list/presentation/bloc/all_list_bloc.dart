@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../../common/servicelocator/serview_locator.dart';
 import '../../../addTask/domain/entities/add_task_model.dart';
 import '../../../addTask/domain/entities/category.dart';
 import '../../domain/usecase/get_todo_task_usecase.dart';
@@ -10,8 +11,8 @@ part 'all_list_event.dart';
 part 'all_list_state.dart';
 
 class AllListBloc extends Bloc<AllListEvent, AllListState> {
-  GetTodoTaskUseCase _getTodoTaskUseCase;
-  AllListBloc(this._getTodoTaskUseCase) : super(AllListState.initial()) {
+  GetTodoTaskUseCase _getTodoTaskUseCase=getIt<GetTodoTaskUseCase>();
+  AllListBloc() : super(AllListState.initial()) {
     on<GetTodoTaskList>(getAllTaskList);
     on<GetCategoryForFilterEvent>(getAllCategory);
     on<SelectedCategoryForFilterEvent>(selectCategoryForFilter);

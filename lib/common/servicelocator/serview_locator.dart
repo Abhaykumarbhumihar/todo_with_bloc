@@ -30,14 +30,13 @@ void serviewLocator() {
   getIt.registerLazySingleton<GetTodoTaskUseCase>(
       () => GetTodoTaskUseCase(getIt<GetTodoTaskRepositery>()));
 
-  getIt.registerFactory<AllListBloc>(
-      () => AllListBloc(getIt<GetTodoTaskUseCase>()));
+
+
 
   getIt.registerLazySingleton<TaskListRepositery>(
       () => TaskListRepositeryImple(getIt<HiveHelper>()));
 
   getIt.registerLazySingleton<TaskListUseCase>(
       () => TaskListUseCase(getIt<TaskListRepositery>()));
-  getIt.registerFactory<TaskListBloc>(
-      () => TaskListBloc(getIt<TaskListUseCase>()));
+
 }

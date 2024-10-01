@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../../common/servicelocator/serview_locator.dart';
 import '../../../addTask/domain/entities/add_task_model.dart';
 import '../../domain/usecase/task_list_usecase.dart';
 
@@ -9,8 +10,8 @@ part 'task_list_event.dart';
 part 'task_list_state.dart';
 
 class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
-  TaskListUseCase _taskListUseCase;
-  TaskListBloc(this._taskListUseCase) : super(TaskListState.initial()) {
+  TaskListUseCase _taskListUseCase=getIt<TaskListUseCase>();
+  TaskListBloc() : super(TaskListState.initial()) {
     on<GetAllTaskListEvent>(getAllTaskLitst);
     on<DeleteTaskEvent>(deleteTaskById);
   }
