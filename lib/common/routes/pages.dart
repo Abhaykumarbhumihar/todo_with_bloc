@@ -32,7 +32,7 @@ class AppPages {
           route: AppRoutes.ADD_TASK_LIST,
           bloc: BlocProvider(
             create: (_) {
-              final bloc = AddTaskBloc(getIt<AddTaskUseCase>());
+              final bloc = AddTaskBloc();
               bloc.add(GetCategoryEvent());
               return bloc;
             },

@@ -19,7 +19,7 @@ dependencies:
   equatable:
   hive_flutter:
   get_it:
-  intl:
+  intl: any
   grouped_list:
 
 
@@ -27,6 +27,8 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -129,6 +131,9 @@ flutter:
     - family: Poppins ThinItalic
       fonts:
         - asset: assets/fonts/Poppins-ThinItalic.ttf
+flutter_intl:
+  enabled: true
+  arb-dir: lib/l10n  # Specify the directory for .arb files
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

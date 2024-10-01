@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todoapp/common/extension/common_extension.dart';
 import 'package:todoapp/pages/addTask/domain/entities/category.dart';
 
+import '../../../../common/servicelocator/serview_locator.dart';
 import '../../../../local_storage/hive/hive_helper.dart';
 import '../../domain/entities/add_task_model.dart';
 import '../../domain/usecase/add_task_usecase.dart';
@@ -18,10 +19,10 @@ class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
   TextEditingController timeController = TextEditingController();
   TextEditingController taskNameController = TextEditingController();
 
-  AddTaskUseCase _addTaskUseCase;
+  final AddTaskUseCase _addTaskUseCase = getIt<AddTaskUseCase>();
   Box<TaskCategory>? _categoryBox;
 
-  AddTaskBloc(this._addTaskUseCase) : super(AddTaskState.initial()) {
+  AddTaskBloc() : super(AddTaskState.initial()) {
     _initialize();
     on<AddCategoryEvent>(addCategory);
     on<GetCategoryEvent>(getCategory);

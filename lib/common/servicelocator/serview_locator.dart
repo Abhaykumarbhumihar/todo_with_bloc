@@ -22,8 +22,7 @@ void serviewLocator() {
       () => AddTaskRepositeryImpl(getIt<HiveHelper>()));
   getIt.registerLazySingleton<AddTaskUseCase>(
       () => AddTaskUseCase(getIt<AddTaskRepositery>()));
-  getIt
-      .registerFactory<AddTaskBloc>(() => AddTaskBloc(getIt<AddTaskUseCase>()));
+
 
   getIt.registerLazySingleton<GetTodoTaskRepositery>(
       () => GetTodoTaskRepositeryImpl(getIt<HiveHelper>()));

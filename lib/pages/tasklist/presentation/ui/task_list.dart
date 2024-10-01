@@ -23,7 +23,7 @@ class TaskList extends StatelessWidget {
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           backgroundColor: AppColor.backgroundColor,
-          body: Container(
+          body: SizedBox(
             width: screenWidth,
             height: screenHeight,
             child: Column(
