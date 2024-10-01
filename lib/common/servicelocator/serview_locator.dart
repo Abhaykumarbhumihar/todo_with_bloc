@@ -10,10 +10,6 @@ import 'package:todoapp/pages/tasklist/data/task_list_repo_impl.dart';
 import 'package:todoapp/pages/tasklist/domain/repositery/task_list_repositery.dart';
 import 'package:todoapp/pages/tasklist/domain/usecase/task_list_usecase.dart';
 
-import '../../pages/addTask/presentation/bloc/add_task_bloc.dart';
-import '../../pages/all_list/presentation/bloc/all_list_bloc.dart';
-import '../../pages/tasklist/presentation/bloc/task_list_bloc.dart';
-
 final GetIt getIt = GetIt.instance;
 
 void serviewLocator() {
@@ -23,20 +19,15 @@ void serviewLocator() {
   getIt.registerLazySingleton<AddTaskUseCase>(
       () => AddTaskUseCase(getIt<AddTaskRepositery>()));
 
-
   getIt.registerLazySingleton<GetTodoTaskRepositery>(
       () => GetTodoTaskRepositeryImpl(getIt<HiveHelper>()));
 
   getIt.registerLazySingleton<GetTodoTaskUseCase>(
       () => GetTodoTaskUseCase(getIt<GetTodoTaskRepositery>()));
 
-
-
-
   getIt.registerLazySingleton<TaskListRepositery>(
       () => TaskListRepositeryImple(getIt<HiveHelper>()));
 
   getIt.registerLazySingleton<TaskListUseCase>(
       () => TaskListUseCase(getIt<TaskListRepositery>()));
-
 }
